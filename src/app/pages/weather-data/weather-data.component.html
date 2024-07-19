@@ -1,0 +1,50 @@
+<div class="background min-h-screen flex items-center justify-center">
+
+    <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8">
+
+        <div class="p-6 max-w-sm bg-gradient-to-r from-yellow-200 via-yellow-300 to-yellow-400 rounded-xl shadow-md space-y-4">
+            <div class="flex items-center justify-center">
+                <div class="text-xl font-medium text-black">{{ weatherData?.name }}</div>
+            </div>
+            <p class="text-gray-700 text-center">{{ weatherData?.weather[0].description }}</p>
+            <div class="text-5xl text-center text-orange-600 flex items-center justify-center">
+                <img class="mr-2" [src]="imageUrl" *ngIf="imageUrl != ''" alt="Weather Icon">
+                {{ weatherData?.main.temp - 273.15 | number:'1.0-1' }}°C
+            </div>
+            <div class="text-center text-gray-600">
+                <p>Feels like {{ weatherData?.main.feels_like - 273.15 | number:'1.0-1' }}°C</p>
+                <p>Sunset at  {{ weatherData?.sys.sunset * 1000 | date:'HH:mm' }}</p>
+            </div>
+        </div>
+
+        <div class="p-6 max-w-lg bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 rounded-xl shadow-md space-y-4">
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2">
+                    <label for="location" class="text-gray-700">Location:</label>
+                    <select id="location" [(ngModel)]="location" class="border border-gray-300 rounded-md p-2">
+                        <option *ngFor="let loction of locations" [value]="loction">{{ loction }}</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="fromDate" class="text-gray-700">From Date:</label>
+                    <input type="date" id="fromDate" [(ngModel)]="fromDate" class="border border-gray-300 rounded-md p-2">
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="toDate" class="text-gray-700">To Date:</label>
+                    <input type="date" id="toDate" [(ngModel)]="toDate" class="border border-gray-300 rounded-md p-2">
+                </div>
+            </div>
+            <div class="flex justify-center mt-4">
+                <button (click)="getHistoricalWeatherData()" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">SUBMIT</button>
+            </div>
+            <div *ngIf="historicalWeatherData" class="mt-4 space-y-4">
+                <div *ngFor="let data of historicalWeatherData" class="bg-white p-4 rounded-md shadow-md">
+                    <p class="text-gray-700">Date: {{ data.dt * 1000 | date:'medium' }}</p>
+                    <p class="text-gray-700">Temperature: {{ data.temp }} K</p>
+                    <p class="text-gray-700">Weather: {{ data.weather[0].description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
